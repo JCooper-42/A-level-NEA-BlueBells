@@ -30,24 +30,15 @@ class SignIn(MenuSetUp):  # SignIn screen
         super().__init__("Sign In", (250, 250, 250))
         self.password_rect = pygame.Rect(175, 300, 150, 50)  # Sign-in button rectangle
 
-    def draw_signin_screen(self):
-        # Fill background
-        self.displaysurface.fill(self.background_color)
-
-        # Draw the password rectangle (sign-in button area)
+    def username_box(self):
+        text_surface = self.contentfont.render("Hello", True, (255, 255, 255))
         pygame.draw.rect(self.displaysurface, (100, 0, 0), self.password_rect)
-
-        # Render and display text "Hello" inside the button
-        text_surface = self.contentfont.render(self.input_text, True, (255, 255, 255))
-        text_rect = text_surface.get_rect(center=self.password_rect.center)  # Center the text inside the rect
-        self.displaysurface.blit(text_surface, text_rect)
-
-
+        self.displaysurface.blit(text_surface, (250, 250))
+       
 class DashBoard(MenuSetUp):  # Dashboard screen
     def __init__(self):
         self.leftarrow = pygame.transform.scale(pygame.image.load(os.path.join("leftarrow.png")), (100, 100))
         self.rightarrow_img = pygame.transform.rotate(self.leftarrow, 180) # Right is left rotated 180 degrees
-
         super().__init__("DashBoard", (255, 255, 255))  # Set the color using hex values here
 
         # Define button rectangles for left and right buttons
@@ -56,6 +47,7 @@ class DashBoard(MenuSetUp):  # Dashboard screen
 
     def clickleft(self):
         # Draw left button and arrow
+        passwordtext = ''
         pygame.draw.rect(self.displaysurface, self.background_color, self.left_button_rect)  # Draw the left button
         self.displaysurface.blit(self.leftarrow, (50, 350))  # Draw left arrow
 
@@ -77,7 +69,8 @@ while True:
     # Allows for screen swap but still using MenuSetUp
     if current_screen == "SignIn":
         sign_in_screen.drivemenu()
-        sign_in_screen.draw_signin_screen()
+        sign_in_screen.username_box()
+        
     elif current_screen == "DashBoard":
         dashboard_screen.drivemenu()
         dashboard_screen.funfactsarea()
@@ -95,8 +88,28 @@ while True:
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouse_pos = pygame.mouse.get_pos()  # Get mouse position when clicked
 
+         if input_rect.collidepoint(event.pos): 
+                active = True
+            else: 
+                active = False
+  
+        if event.type == pygame.KEYDOWN: 
+  
+            # Check for backspace 
+            if event.key == pygame.K_BACKSPACE: 
+  
+                # get text input from 0 to -1 i.e. end. 
+                user_text = user_text[:-1] 
+  
+            # Unicode standard is used for string 
+            # formation 
+            else: 
+                user_text += event.unicode
+        
+
             # Check if the user clicks the "Sign In" button on the sign-in screen
-            if current_screen == "SignIn" and sign_in_screen.button_rect.collidepoint(mouse_pos):
+            # Call method to check user values and return if match hash - if that is true then next screen
+            if current_screen == "SignIn":
                 print("Sign-in successful!")
                 current_screen = "DashBoard"  # Switch to the dashboard screen
 
