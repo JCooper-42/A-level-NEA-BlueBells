@@ -21,7 +21,6 @@ class Menu:
         self.weight = self.mass * 9.81  # mass --> weight
         display.show(self.weight)
         self.mass = 0  # reset for next lift
-        return True
 
     def enqueue(self, Button_Press):
         if "AB" not in self.queue:  # AB takes priority
@@ -38,35 +37,33 @@ class Menu:
                 self.select_mass()
 
     def menu_logic(self):
-        while True:
+        while not pin_logo.is_touched():
             # Check button presses and enqueue actions
             if button_a.was_pressed():
                 self.enqueue("A")
             if button_b.was_pressed():
                 self.enqueue("B")
-            if pin_logo.is_touched():
-                self.enqueue("AB")
-
             if len(self.queue) != 0:
                 self.dequeue()
+        self.select_mass()
 
 class DataCollection:
 
     def __init__(self):
         self.df = DataFilter(self)
-        self.time = 0 # timer for the workout
+        self.time = 0  # timer for the workout
         self.x_Readings = []
         self.y_Readings = []
         self.z_Readings = []
         self.stop_flag = False
 
     def timer(self):
-        while not self.stop_flag: # Loop for clock
+        while not self.stop_flag:  # Loop for clock
             # Stops when stop_flag evaluates to true
             t.sleep(1)
             self.time += 1
 
-    def get_time(self): # returns length of workout
+    def get_time(self):  # returns length of workout
         return self.time
 
     def accelerometer(self):
@@ -86,17 +83,18 @@ class DataCollection:
             self.z_Readings.append(z_acceleration)
             self.stop()
         self.df.get_values()
-        
-            # 3 plane accelerometer
-            # 3 lists used to store a from each plane
+
+        # 3 plane accelerometer
+        # 3 lists used to store a from each plane
 
     def get_acceleration(self):
         return self.x_Readings, self.y_Readings, self.z_Readings
 
-    def stop(self): # stop flag
+    def stop(self):  # stop flag
         if button_a.is_pressed():
             self.stop_flag = True
             # Used to show if user is working out or not
+
 
 class DataFilter:
 
@@ -107,13 +105,10 @@ class DataFilter:
         self.AccelYtf = []
         self.AccelZtf = []
         self.time = 0
-        
-
 
     def get_values(self):
         self.time = self.DataSet.get_time()
         self.UnpackAccel()
-
 
     def UnpackAccel(self):
         (self.AccelXtf, self.AccelYtf, self.AccelZtf) = self.DataSet.get_acceleration()
@@ -131,7 +126,7 @@ class DataFilter:
                 self.AccelZtf.pop(i)
             i -= 1  # Decrement index
         self.medianfilter()
-    
+
     def calculate_median(self, values):
         sortedVals = sorted(values)
         mid_index = len(sortedVals) // 2
@@ -143,58 +138,60 @@ class DataFilter:
 
     def medianfilter(self):
         for i in range(0, len(self.AccelXtf) - 2):
-            values = [self.AccelXtf[i], self.AccelXtf[i+1], self.AccelXtf[i+2]]
+            values = [self.AccelXtf[i], self.AccelXtf[i + 1], self.AccelXtf[i + 2]]
             median = self.calculate_median(values)
             self.AccelXtf[i] = abs(int(round(median)))  # Replace the value with the median
 
         for i in range(0, len(self.AccelZtf) - 2):
-            values = [self.AccelZtf[i], self.AccelZtf[i+1], self.AccelZtf[i+2]]
+            values = [self.AccelZtf[i], self.AccelZtf[i + 1], self.AccelZtf[i + 2]]
             median = self.calculate_median(values)
             self.AccelZtf[i] = abs(int(round(median)))  # Replace the value with the median
 
         for i in range(0, len(self.AccelYtf) - 2):
-            values = [self.AccelYtf[i], self.AccelYtf[i+1], self.AccelYtf[i+2]]
+            values = [self.AccelYtf[i], self.AccelYtf[i + 1], self.AccelYtf[i + 2]]
             median = self.calculate_median(values)
             self.AccelYtf[i] = abs(int(round(median)))  # Replace the value with the median
+
 
 class intergrate(DataFilter):
 
     def __init__(self):
-        self.Xvel = [] # Velocity first intergral
+        self.Xvel = []  # Velocity first intergral
         self.Yvel = []
         self.Zvel = []
 
-        self.Xdisp = [] # Displacment intergral of velocity
+        self.Xdisp = []  # Displacment intergral of velocity
         self.Ydisp = []
         self.Zdisp = []
-        DataFilter.__init__(self, DataCollection) # Inherit acceleration
-        
+        DataFilter.__init__(self, DataCollection)  # Inherit acceleration
+
     def leftReinamnnIntergral(self):
         # Define rectangle widths (dt)
         dtx = (self.time) / (len(self.AccelXtf) - 1)
         dty = (self.time) / (len(self.AccelYtf) - 1)
         dtz = (self.time) / (len(self.AccelZtf) - 1)
-        for i in range(0,len(self.AccelXtf)):
+        for i in range(0, len(self.AccelXtf)):
             self.Xvel.append(dtx * self.AccelXtf[i])
             self.Xdisp.append(dtx * self.AccelXtf[i])
-        
-        for j in range(0,len(self.AccelYtf)):
+
+        for j in range(0, len(self.AccelYtf)):
             self.Yvel.append(dty * self.AccelXtf[j])
             self.Ydisp.append(dty * self.AccelXtf[j])
-        
-        for z in range(0,len(self.AccelXtf)):
+
+        for z in range(0, len(self.AccelXtf)):
             self.Zvel.append(dtz * self.AccelZtf[z])
             self.Zdisp.append(dtz * self.AccelZtf[z])
+
 
 class driver(Menu, DataCollection, DataFilter):
     def drive(self):
         self.menu_logic()
-        if self.select_mass == True:
-            print("Hello world")
+        print("Balls")
+
 
 runner = driver()
 runner.drive()
-    
-        
+
+
 
 
