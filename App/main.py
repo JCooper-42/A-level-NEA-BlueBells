@@ -46,9 +46,9 @@ class SignIn(MenuSetUp):  # SignIn screen
         self.displaysurface.blit(text_surface, (self.password_rect.x + 5, self.password_rect.y + 15))
 
         # Draw the sign-in button
-        pygame.draw.rect(self.displaysurface, (0, 100, 0), self.signin_button_rect)
+        pygame.draw.rect(self.displaysurface, (0, 0, 0), self.signin_button_rect)
         signin_text = self.contentfont.render("Sign In", True, (255, 255, 255))
-        self.displaysurface.blit(signin_text, (self.signin_button_rect.x + 20, self.signin_button_rect.y + 15))
+        self.displaysurface.blit(signin_text, (self.signin_button_rect.x + 30, self.signin_button_rect.y + 10))
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
