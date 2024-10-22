@@ -1,4 +1,5 @@
 import random
+import hashlib
 
 class Userhandling:
 
@@ -10,21 +11,18 @@ class Userhandling:
 
     @staticmethod
     def calchash(string):
-        total = 0 # sum each value for a folding hash
-        for i in range(0,len(string)):
-            total = total + ord(string[0]) # ord gives ascii value of character
-        return total
+        hash = hashlib.sha512()
+        hash.update(string.encode())
+        return hash
 
     def makeaccount(self):
         password = input("What is your password: ")
-        salt = random.randint(0, 100) # A random value added to end to make all passwords different
-        salt = str(salt) # Make a string so ord can be used
-        password = password.join(salt) # join so password is with salt
-        password = self.calchash(password) # calculate the modulo 26 hash
-        data = password, salt
-        file = open("passwords.txt", "a") # File writing
-        file.write(str(data))
+        file = open("passwords.txt", "r")
+        hash = hashlib.sha512()
+        hash.update(password)
+        print(hash)
 
     def search(self, password):
         file = open("passwords.txt", "r")
+
 

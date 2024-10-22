@@ -1,6 +1,7 @@
 import os.path
 import pygame
 import UserHandling
+from App.UserHandling import Userhandling
 
 
 class MenuSetUp:
@@ -126,6 +127,7 @@ while True:
             if event.type == pygame.MOUSEBUTTONDOWN and sign_in_screen.signin_button_rect.collidepoint(event.pos):
                 print("Sign-in successful!")
                 print(f"Password entered: {sign_in_screen.password}")  # Use the password here
+                print(Userhandling.calchash(sign_in_screen.password))
                 current_screen = "DashBoard"  # Switch to the dashboard screen
 
         # Check if mouse clicked on the left or right button on the dashboard
