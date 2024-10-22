@@ -62,6 +62,8 @@ class SignIn(MenuSetUp):  # SignIn screen
             if event.key == pygame.K_BACKSPACE:
                 # Remove the last character
                 self.password = self.password[:-1]
+            if event.key == pygame.K_BACKSPACE and pygame.key.get_mods() & pygame.KMOD_CTRL:
+                self.password = ""
             else:
                 # Add character to the password
                 self.password += event.unicode
