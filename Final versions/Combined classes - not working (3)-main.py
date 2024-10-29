@@ -1,12 +1,18 @@
 from microbit import *
 import time as t
 
+
 class Menu:
 
     def __init__(self):
         self.mass = 0
         self.weight = 0
         self.queue = []  # Create a list to use as a priority queue ADT
+        self.running = "True"
+
+    def termimate(self):
+        display.clear()
+        self.running = "False"
 
     def increase_mass(self):
         self.mass += 5
@@ -37,7 +43,7 @@ class Menu:
                 self.select_mass()
 
     def menu_logic(self):
-        while not pin_logo.is_touched():
+        while not pin_logo.is_touched() and self.running == "True":
             # Check button presses and enqueue actions
             if button_a.was_pressed():
                 self.enqueue("A")
@@ -46,6 +52,7 @@ class Menu:
             if len(self.queue) != 0:
                 self.dequeue()
         self.select_mass()
+
 
 class DataCollection:
 
@@ -186,12 +193,9 @@ class intergrate(DataFilter):
 class driver(Menu, DataCollection, DataFilter):
     def drive(self):
         self.menu_logic()
-        print("Balls")
+        if accelerometer.was_gesture('shake'):
+            self.termimate()
 
 
 runner = driver()
 runner.drive()
-
-
-
-
