@@ -1,28 +1,31 @@
-import random
 import hashlib
 
 class Userhandling:
 
-    def __init__(self, username, password, salt):
-        self.username = username # user input
-        self.password = password # user input
-        self.salt = salt # retrived from file from username
-        # salt is a random number added to passwords to lower likleyhood of hash function collisions
+    def __init__(self):
+        self.hashed_password = ""
 
-    @staticmethod
-    def calchash(string):
+    def calchash(self, string):
         hash_obj = hashlib.sha512()
         hash_obj.update(string.encode())
-        return hash_obj.hexdigest()  # Convert to hexadecimal string
+        hashed_password = hash_obj.hexdigest()
+        self.hashed_password = hashed_password
+
+    def checkhash(self):
+        with open("passwords.txt", "r") as file:
+            if self.hashed_password in file.read():
+                print("Good")
+            else:
+                print("You shall not pass(word)")
 
     def makeaccount(self):
         password = input("What is your password: ")
-        file = open("passwords.txt", "r")
-        hash = hashlib.sha512()
-        hash.update(password)
-        print(hash)
+        hash_obj = hashlib.sha512()
+        hash_obj.update(password.encode())
+        with open("passwords.txt", "a") as file:
+            file.write(hash_obj.hexdigest())
+            file.write("\n")
 
-    def search(self, password):
-        file = open("passwords.txt", "r")
-
-
+if __name__ == "__main__":
+    Uh = Userhandling()
+    Uh.makeaccount()

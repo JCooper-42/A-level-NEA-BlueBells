@@ -1,8 +1,6 @@
 import os.path
 import pygame
-import UserHandling
-from App.UserHandling import Userhandling
-
+from App.UserHandling import Userhandling  # Import correctly
 
 class MenuSetUp:
 
@@ -33,6 +31,7 @@ class SignIn(MenuSetUp):  # SignIn screen
         self.signin_button_rect = pygame.Rect(200, 400, 100, 50)  # Sign-in button rectangle
         self.password = ""  # Store the password entered by the user
         self.active = False  # Track if the password input box is active for input
+        self.user_handler = Userhandling()  # Create an instance of Userhandling
 
     def draw_signin_screen(self):
         # Fill background
@@ -63,7 +62,7 @@ class SignIn(MenuSetUp):  # SignIn screen
             if event.key == pygame.K_BACKSPACE:
                 # Remove the last character
                 self.password = self.password[:-1]
-            if event.key == pygame.K_BACKSPACE and pygame.key.get_mods() & pygame.KMOD_CTRL:
+            elif event.key == pygame.K_BACKSPACE and pygame.key.get_mods() & pygame.KMOD_CTRL:
                 self.password = ""
             else:
                 # Add character to the password
@@ -125,10 +124,11 @@ while True:
 
             # Check if the user clicks the "Sign In" button
             if event.type == pygame.MOUSEBUTTONDOWN and sign_in_screen.signin_button_rect.collidepoint(event.pos):
-                print("Sign-in successful!")
-                print(f"Password entered: {sign_in_screen.password}")  # Use the password here
-                print(Userhandling.calchash(sign_in_screen.password))
-                current_screen = "DashBoard"  # Switch to the dashboard screen
+                print("Sign-in button pressed")
+                # Hash and verify the password
+                sign_in_screen.user_handler.calchash(sign_in_screen.password)
+                sign_in_screen.user_handler.checkhash()
+                current_screen = "DashBoard"  # Switch to the dashboard screen if successful
 
         # Check if mouse clicked on the left or right button on the dashboard
         if current_screen == "DashBoard":
