@@ -11,9 +11,9 @@ class Userhandling:
 
     @staticmethod
     def calchash(string):
-        hash = hashlib.sha512()
-        hash.update(string.encode())
-        return hash
+        hash_obj = hashlib.sha512()
+        hash_obj.update(string.encode())
+        return hash_obj.hexdigest()  # Convert to hexadecimal string
 
     def makeaccount(self):
         password = input("What is your password: ")
