@@ -1,5 +1,6 @@
 from microbit import *
 import time as t
+import music
 
 
 class Menu:
@@ -10,7 +11,7 @@ class Menu:
         self.queue = []  # Create a list to use as a priority queue ADT
         self.running = "True"
 
-    def termimate(self):
+    def terminate(self):
         display.clear()
         self.running = "False"
 
@@ -27,6 +28,8 @@ class Menu:
         self.weight = self.mass * 9.81  # mass --> weight
         display.show(self.weight)
         self.mass = 0  # reset for next lift
+        self.terminate()
+        return 1
 
     def enqueue(self, Button_Press):
         if "AB" not in self.queue:  # AB takes priority
@@ -122,7 +125,6 @@ class DataFilter:
         self.LPF()
 
     def LPF(self):
-        print(self.AccelXtf)
         i = len(self.AccelXtf) - 1  # Start from last index
         while i >= 0:  # Go backward to avoid index shifting issues
             if self.AccelXtf[i] < -28 or self.AccelXtf[i] > 28:
@@ -158,6 +160,7 @@ class DataFilter:
             values = [self.AccelYtf[i], self.AccelYtf[i + 1], self.AccelYtf[i + 2]]
             median = self.calculate_median(values)
             self.AccelYtf[i] = abs(int(round(median)))  # Replace the value with the median
+        return 1
 
 
 class intergrate(DataFilter):
@@ -189,12 +192,28 @@ class intergrate(DataFilter):
             self.Zvel.append(dtz * self.AccelZtf[z])
             self.Zdisp.append(dtz * self.AccelZtf[z])
 
+        return self.Xvel
 
-class driver(Menu, DataCollection, DataFilter):
+
+class driver(Menu, DataCollection, DataFilter, intergrate):
+
+    def __init__(self):
+        Menu.__init__(self)
+        DataCollection.__init__(self)
+        DataFilter.__init__(self, DataCollection=self)
+        intergrate.__init__(self)
+
     def drive(self):
         self.menu_logic()
-        if accelerometer.was_gesture('shake'):
-            self.termimate()
+        if self.select_mass() == 1:
+            self.accelerometer()
+            if self.medianfilter() == 1:
+                print(self.leftReinamnnIntergral())
+
+    def returnformatting(self):
+        pass
+        # This is the logic so I get a nice tuple of all
+        # return values for use in a seperate algorithm
 
 
 runner = driver()
