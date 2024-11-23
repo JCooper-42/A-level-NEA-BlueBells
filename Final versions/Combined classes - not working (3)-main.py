@@ -72,17 +72,9 @@ class DataCollection:
         self.z_Readings = []
         self.stop_flag = False
 
-    def timer(self):
-        while not self.stop_flag:
-            t.sleep(1)
-            self.time += 1
-
-    def get_time(self):
-        return self.time
-
     def accelerometer(self):
         while not self.stop_flag:
-            t.sleep(0.1)
+            t.sleep(1)
             x_acceleration = accelerometer.get_x() / 1000 * 9.81
             self.x_Readings.append(x_acceleration)
             y_acceleration = accelerometer.get_y() / 1000 * 9.81
@@ -90,13 +82,18 @@ class DataCollection:
             z_acceleration = accelerometer.get_z() / 1000 * 9.81
             self.z_Readings.append(z_acceleration)
 
-            if button_a.is_pressed():  # Stop condition
+            self.time += 1
+
+            if button_a.is_pressed() and self.time > 0:  # Stop condition
                 self.stop_flag = True
 
         self.df.get_values()
 
     def get_acceleration(self):
         return self.x_Readings, self.y_Readings, self.z_Readings
+
+    def get_time(self):
+        return self.time
 
 
 class DataFilter:
@@ -109,6 +106,7 @@ class DataFilter:
 
     def get_values(self):
         self.time = self.DataSet.get_time()
+        print(self.time)
         self.unpack_accel()
 
     def unpack_accel(self):
