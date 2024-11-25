@@ -11,8 +11,13 @@ class MenuSetUp:
         self.background_color = background_color  # Set background color
         self.displaysurface = pygame.display.set_mode((500, 500))  # Tuple for window size
         self.titlefont = pygame.font.SysFont('opensans', 64)
-        self.contentfont = pygame.font.SysFont('opensans', 16)
+        self.contentfont = pygame.font.SysFont('opensans', 20)
         self.running = True  # Running so it can be stopped
+
+    def writeToScreen(self, text: str, posx: int, posy: int):
+        text = self.contentfont.render(text, 1, (0,0,0))
+        dest = text.get_rect(x = posx, y = posy)
+        self.displaysurface.blit(text, dest)
 
     def drivemenu(self):
         self.displaysurface.fill(self.background_color)  # Put background color on the screen
@@ -22,7 +27,6 @@ class MenuSetUp:
         text = self.titlefont.render(text, 1, (0, 0, 0))
         dest = text.get_rect(center=(250, 30))  # All screens are same size
         self.displaysurface.blit(text, dest)
-
 
 class SignIn(MenuSetUp):  # SignIn screen
     def __init__(self):
@@ -62,11 +66,12 @@ class SignIn(MenuSetUp):  # SignIn screen
             if event.key == pygame.K_BACKSPACE:
                 # Remove the last character
                 self.password = self.password[:-1]
-            elif event.key == pygame.K_BACKSPACE and pygame.key.get_mods() & pygame.KMOD_CTRL:
+            if event.key == pygame.K_BACKSPACE and pygame.key.get_mods() & pygame.KMOD_CTRL:
                 self.password = ""
-            else:
+            elif event.key != pygame.K_RETURN: # Makes sure enter is not registered as an input
                 # Add character to the password
                 self.password += event.unicode
+
 
 
 class DashBoard(MenuSetUp):  # Dashboard screen
@@ -104,6 +109,8 @@ while True:
     if current_screen == "SignIn":
         sign_in_screen.drivemenu()
         sign_in_screen.draw_signin_screen()
+        sign_in_screen.writetotopcentre("BlueBells")
+        sign_in_screen.writeToScreen("Password: ", 100, 320)
     elif current_screen == "DashBoard":
         dashboard_screen.drivemenu()
         dashboard_screen.funfactsarea()
@@ -127,8 +134,8 @@ while True:
                 print("Sign-in button pressed")
                 # Hash and verify the password
                 sign_in_screen.user_handler.calchash(sign_in_screen.password)
-                sign_in_screen.user_handler.checkhash()
-                current_screen = "DashBoard"  # Switch to the dashboard screen if successful
+                if sign_in_screen.user_handler.checkhash():
+                    current_screen = "DashBoard"  # Switch to the dashboard screen if successful
 
         # Check if mouse clicked on the left or right button on the dashboard
         if current_screen == "DashBoard":
