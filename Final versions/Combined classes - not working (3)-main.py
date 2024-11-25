@@ -93,6 +93,7 @@ class DataCollection:
         return self.x_Readings, self.y_Readings, self.z_Readings
 
     def get_time(self):
+        print(self.time)
         return self.time
 
 
@@ -106,7 +107,7 @@ class DataFilter:
 
     def get_values(self):
         self.time = self.DataSet.get_time()
-        print(self.time)
+        print("Time:", self.time)
         self.unpack_accel()
 
     def unpack_accel(self):
@@ -143,12 +144,15 @@ class DataFilter:
             values = self.AccelZtf[i:i + 3]
             median = self.calculate_median(values)
             self.AccelZtf[i] = abs(round(median))
-        return 1
+
+    def tuple_to_export(self):
+        return self.AccelXtf, self.AccelYtf, self.AccelZtf  # Export data as tuple
 
 
-class Integrate(DataFilter):
-    def __init__(self):
-        super().__init__(DataCollection())
+class Integrate:
+    def __init__(self, accel_tuple, time):
+        self.AccelXtf, self.AccelYtf, self.AccelZtf = accel_tuple  # Unpack tuple
+        self.time = time  # Get time from DataFilter
         self.Xvel = []
         self.Yvel = []
         self.Zvel = []
@@ -157,6 +161,7 @@ class Integrate(DataFilter):
         self.Zdisp = []
 
     def left_reimann_integral(self):
+        print("Starting integration...")
         dtx = self.time / len(self.AccelXtf) if len(self.AccelXtf) > 0 else 0
         dty = self.time / len(self.AccelYtf) if len(self.AccelYtf) > 0 else 0
         dtz = self.time / len(self.AccelZtf) if len(self.AccelZtf) > 0 else 0
@@ -171,25 +176,39 @@ class Integrate(DataFilter):
 
         for z in range(len(self.AccelZtf)):
             self.Zvel.append(dtz * self.AccelZtf[z])
-            self.Zdisp.append(dtz * sum(self.Zvel))
+        self.Zdisp.append(dtz * sum(self.Zvel))
 
-        return self.Xvel
+        print("X Velocity:", self.Xvel)
+        print("Y Velocity:", self.Yvel)
+        print("Z Velocity:", self.Zvel)
+
+        # Return all velocities
+        return self.Xvel, self.Yvel, self.Zvel
+
+    def cut0(self):
+        pass  # Cut all the 0's in the list so less memory used
+
+    # Compress???
 
 
-class Driver(Menu, DataCollection, DataFilter, Integrate):
+class Driver(Menu, DataCollection):
     def __init__(self):
         Menu.__init__(self)
         DataCollection.__init__(self)
-        DataFilter.__init__(self, data_collection=self)
-        Integrate.__init__(self)
+        self.data_filter = DataFilter(self)  # Create DataFilter instance
 
     def drive(self):
         self.menu_logic()
         if self.select_mass() == 1:
-            self.accelerometer()
-            if self.medianfilter() == 1:
-                print(self.left_reimann_integral())
+            self.accelerometer()  # Collect data
+            self.data_filter.get_values()  # Filter data
+            accel_tuple = self.data_filter.tuple_to_export()  # Export tuple
+            time_value = self.data_filter.time  # Get time
+            integrator = Integrate(accel_tuple, time_value)
+            xresult, yresult, zresult = integrator.left_reimann_integral()
+            result = (xresult, yresult, zresult)
 
 
 runner = Driver()
 runner.drive()
+
