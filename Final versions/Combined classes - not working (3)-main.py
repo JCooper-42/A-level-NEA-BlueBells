@@ -162,10 +162,10 @@ class Integrate:
 
     def left_reimann_integral(self):
         print("Starting integration...")
-        dtx = self.time / len(self.AccelXtf) if len(self.AccelXtf) > 0 else 0
-        dty = self.time / len(self.AccelYtf) if len(self.AccelYtf) > 0 else 0
-        dtz = self.time / len(self.AccelZtf) if len(self.AccelZtf) > 0 else 0
-
+        dtx = self.time / len(self.AccelXtf) if len(self.AccelXtf) > 0 
+        dty = self.time / len(self.AccelYtf) if len(self.AccelYtf) > 0 
+        dtz = self.time / len(self.AccelZtf) if len(self.AccelZtf) > 0
+        # removed else to not have 0s
         for i in range(len(self.AccelXtf)):
             self.Xvel.append(dtx * self.AccelXtf[i])
             self.Xdisp.append(dtx * sum(self.Xvel))
@@ -185,12 +185,6 @@ class Integrate:
         # Return all velocities
         return self.Xvel, self.Yvel, self.Zvel
 
-    def cut0(self):
-        pass  # Cut all the 0's in the list so less memory used
-
-    # Compress???
-
-
 class Driver(Menu, DataCollection):
     def __init__(self):
         Menu.__init__(self)
@@ -202,10 +196,11 @@ class Driver(Menu, DataCollection):
         if self.select_mass() == 1:
             self.accelerometer()  # Collect data
             self.data_filter.get_values()  # Filter data
-            accel_tuple = self.data_filter.tuple_to_export()  # Export tuple
+            accel_tuple = self.data_filter.tuple_to_export()
             time_value = self.data_filter.time  # Get time
             integrator = Integrate(accel_tuple, time_value)
             xresult, yresult, zresult = integrator.left_reimann_integral()
+            #Check if this is not just copying same result to 3 lists
             result = (xresult, yresult, zresult)
 
 
