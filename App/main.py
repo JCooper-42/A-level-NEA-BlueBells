@@ -65,9 +65,9 @@ class SignIn(MenuSetUp):  # SignIn screen
         if event.type == pygame.KEYDOWN and self.active:
             if event.key == pygame.K_BACKSPACE:
                 # Remove the last character
-                self.password = self.password[:-1]
+                self.password = self.password[:-1] # removed the last character in the password string
             if event.key == pygame.K_BACKSPACE and pygame.key.get_mods() & pygame.KMOD_CTRL:
-                self.password = ""
+                self.password = "" # If control backspace pressed, removed all content in password
             elif event.key != pygame.K_RETURN: # Makes sure enter is not registered as an input
                 # Add character to the password
                 self.password += event.unicode
@@ -105,9 +105,9 @@ sign_in_screen = SignIn()  # Create instance of sign-in
 dashboard_screen = DashBoard()  # Create instance of dashboard
 
 while True:
-    # Allows for screen swap but still using MenuSetUp
-    if current_screen == "SignIn":
-        sign_in_screen.drivemenu()
+    # Have two screens derived from same parent class
+    if current_screen == "SignIn": 
+        sign_in_screen.drivemenu() 
         sign_in_screen.draw_signin_screen()
         sign_in_screen.writetotopcentre("BlueBells")
         sign_in_screen.writeToScreen("Password: ", 100, 320)
@@ -124,11 +124,9 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
-
         # Handle events for the sign-in screen
         if current_screen == "SignIn":
             sign_in_screen.handle_event(event)
-
             # Check if the user clicks the "Sign In" button
             if event.type == pygame.MOUSEBUTTONDOWN and sign_in_screen.signin_button_rect.collidepoint(event.pos):
                 print("Sign-in button pressed")
