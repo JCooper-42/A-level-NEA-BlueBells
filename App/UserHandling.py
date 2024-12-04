@@ -15,6 +15,7 @@ class Userhandling:
         with open("passwords.txt", "r") as file:
             if self.hashed_password in file.read():
                 print("Good")
+                return True
             else:
                 print("You shall not pass(word)")
 
