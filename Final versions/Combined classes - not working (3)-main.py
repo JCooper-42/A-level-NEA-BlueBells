@@ -1,6 +1,5 @@
 from microbit import *
 import time as t
-import log
 
 
 class Menu:
@@ -207,13 +206,9 @@ class Driver(Menu, DataCollection):
             time_value = self.data_filter.time  # Get time
             integrator = Integrate(accel_tuple, time_value)
             xresult, yresult, zresult = integrator.left_reimann_integral()
-            for i in range(0, len(xresult)):
-                log.add({
-                    'xresult': xresult[i],
-                    'yresult': yresult[i],
-                    'zresult': zresult[i]
-                })
+            result = (xresult, yresult, zresult)
 
 
 runner = Driver()
 runner.drive()
+
