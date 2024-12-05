@@ -99,6 +99,7 @@ class DashBoard(MenuSetUp):  # Dashboard screen
         pygame.draw.rect(self.displaysurface, (0, 0, 0), pygame.Rect(50, 150, 400, 200), 2)  # Fun facts area
 
 
+
 # Initialize state and screens
 current_screen = "SignIn"  # Start with sign-in screen
 sign_in_screen = SignIn()  # Create instance of sign-in
