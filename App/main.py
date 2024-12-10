@@ -1,6 +1,6 @@
 import os.path
 import pygame
-from App.UserHandling import Userhandling  # Import correctly
+from App import Userhandling  # Import correctly
 import OpenData # Class that opens files
 
 class MenuSetUp:
