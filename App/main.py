@@ -1,6 +1,7 @@
 import os.path
 import pygame
 from App.UserHandling import Userhandling  # Import correctly
+import OpenData # Class that opens files
 
 class MenuSetUp:
 
@@ -72,8 +73,6 @@ class SignIn(MenuSetUp):  # SignIn screen
                 # Add character to the password
                 self.password += event.unicode
 
-
-
 class DashBoard(MenuSetUp):  # Dashboard screen
     def __init__(self):
         self.leftarrow = pygame.transform.scale(pygame.image.load(os.path.join("leftarrow.png")), (100, 100))
@@ -99,13 +98,18 @@ class DashBoard(MenuSetUp):  # Dashboard screen
         pygame.draw.rect(self.displaysurface, (0, 0, 0), pygame.Rect(50, 150, 400, 200), 2)  # Fun facts area
 
 
+class DisplayFunFacts(DashBoard):
+
+    def test(self, direction):
+        print(direction)
 
 # Initialize state and screens
 current_screen = "SignIn"  # Start with sign-in screen
 sign_in_screen = SignIn()  # Create instance of sign-in
 dashboard_screen = DashBoard()  # Create instance of dashboard
+fun_facts = DisplayFunFacts()
 
-while True:
+while True: #The main 'game' loop
     # Have two screens derived from same parent class
     if current_screen == "SignIn": 
         sign_in_screen.drivemenu() 
@@ -119,8 +123,10 @@ while True:
         dashboard_screen.clickright()
         dashboard_screen.writetotopcentre("dashboard")
 
+
     pygame.display.flip()  # Draw the screen
 
+#All the keyboard inputs - have to be in main loop
     for event in pygame.event.get():  # Exit on x pressed
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -139,6 +145,7 @@ while True:
         # Check if mouse clicked on the left or right button on the dashboard
         if current_screen == "DashBoard":
             if event.type == pygame.MOUSEBUTTONDOWN and dashboard_screen.left_button_rect.collidepoint(event.pos):
-                print("Left button pressed")
+                fun_facts.test("left")
+
             if event.type == pygame.MOUSEBUTTONDOWN and dashboard_screen.right_button_rect.collidepoint(event.pos):
-                print("Right button pressed")
+                fun_facts.test("right")

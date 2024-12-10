@@ -1,5 +1,5 @@
 import os, fnmatch
-from bs4 import BeautifulSoup
+import csv
 
 class fileManagment:
 
@@ -12,16 +12,17 @@ class fileManagment:
                     results.append(os.path.join(root, name))
                     result = results[0]
                     result = str(result)
-        return result
+                    return result
 
-    def OpenHTM(self, pathToFile):
-        with open(pathToFile, 'r') as file:
-            soup = BeautifulSoup(file, 'html.parser')
-        tables = soup.find_all('table')
-        print(tables)
+    @staticmethod
+    def openCSV(path):
+        try:
+            with open(path, 'r') as file:
+                csvreader = csv.reader(file)
+                for row in csvreader:
+                    print(row)
+        except FileNotFoundError:
+            print("The file was not found")
 
 
 FM = fileManagment()
-path = FM.find("D:", "MY_DATA.htm")
-print(path)
-FM.OpenHTM(path)
