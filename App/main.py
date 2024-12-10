@@ -1,6 +1,6 @@
 import os.path
 import pygame
-from App import Userhandling  # Import correctly
+import UserHandling 
 import OpenData # Class that opens files
 
 class MenuSetUp:
@@ -36,7 +36,6 @@ class SignIn(MenuSetUp):  # SignIn screen
         self.signin_button_rect = pygame.Rect(200, 400, 100, 50)  # Sign-in button rectangle
         self.password = ""  # Store the password entered by the user
         self.active = False  # Track if the password input box is active for input
-        self.user_handler = Userhandling()  # Create an instance of Userhandling
 
     def draw_signin_screen(self):
         # Fill background
@@ -108,6 +107,7 @@ current_screen = "SignIn"  # Start with sign-in screen
 sign_in_screen = SignIn()  # Create instance of sign-in
 dashboard_screen = DashBoard()  # Create instance of dashboard
 fun_facts = DisplayFunFacts()
+Accounts = UserHandling.UserHandling()
 
 while True: #The main 'game' loop
     # Have two screens derived from same parent class
@@ -136,10 +136,9 @@ while True: #The main 'game' loop
             sign_in_screen.handle_event(event)
             # Check if the user clicks the "Sign In" button
             if event.type == pygame.MOUSEBUTTONDOWN and sign_in_screen.signin_button_rect.collidepoint(event.pos):
-                print("Sign-in button pressed")
-                # Hash and verify the password
-                sign_in_screen.user_handler.calchash(sign_in_screen.password)
-                if sign_in_screen.user_handler.checkhash():
+                password = sign_in_screen.password
+                Accounts.calchash(password)
+                if Accounts.checkhash():
                     current_screen = "DashBoard"  # Switch to the dashboard screen if successful
 
         # Check if mouse clicked on the left or right button on the dashboard

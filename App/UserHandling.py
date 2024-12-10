@@ -1,6 +1,6 @@
 import hashlib
 
-class Userhandling:
+class UserHandling:
 
     def __init__(self):
         self.hashed_password = ""
@@ -9,15 +9,12 @@ class Userhandling:
         hash_obj = hashlib.sha512()
         hash_obj.update(string.encode())
         hashed_password = hash_obj.hexdigest()
-        self.hashed_password = hashed_password
+        return hashed_password
 
     def checkhash(self):
         with open("passwords.txt", "r") as file:
             if self.hashed_password in file.read():
-                print("Good")
                 return True
-            else:
-                print("You shall not pass(word)")
 
     def makeaccount(self):
         password = input("What is your password: ")
@@ -27,6 +24,6 @@ class Userhandling:
             file.write(hash_obj.hexdigest())
             file.write("\n")
 
-if __name__ == "__main__":
-    Uh = Userhandling()
-    Uh.makeaccount()
+if __name__ == "__main__()":
+    UH = UserHandling
+    UserHandling.makeaccount
