@@ -24,5 +24,3 @@ class fileManagment:
         except FileNotFoundError:
             print("The file was not found")
 
-
-FM = fileManagment()
