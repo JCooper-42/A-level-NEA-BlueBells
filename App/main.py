@@ -96,17 +96,10 @@ class DashBoard(MenuSetUp):  # Dashboard screen
     def funfactsarea(self):
         pygame.draw.rect(self.displaysurface, (0, 0, 0), pygame.Rect(50, 150, 400, 200), 2)  # Fun facts area
 
-
-class DisplayFunFacts(DashBoard):
-
-    def test(self, direction):
-        print(direction)
-
 # Initialize state and screens
 current_screen = "SignIn"  # Start with sign-in screen
 sign_in_screen = SignIn()  # Create instance of sign-in
 dashboard_screen = DashBoard()  # Create instance of dashboard
-fun_facts = DisplayFunFacts()
 Accounts = UserHandling.UserHandling()
 
 while True: #The main 'game' loop
@@ -144,7 +137,6 @@ while True: #The main 'game' loop
         # Check if mouse clicked on the left or right button on the dashboard
         if current_screen == "DashBoard":
             if event.type == pygame.MOUSEBUTTONDOWN and dashboard_screen.left_button_rect.collidepoint(event.pos):
-                fun_facts.test("left")
-
+                print("Left")
             if event.type == pygame.MOUSEBUTTONDOWN and dashboard_screen.right_button_rect.collidepoint(event.pos):
-                fun_facts.test("right")
+                print("Right")
