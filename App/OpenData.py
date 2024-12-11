@@ -1,18 +1,12 @@
-import os, fnmatch
 import csv
+from os import listdir
 
 class fileManagment:
 
     @staticmethod
-    def find(path, pattern): #Find the file on the microbit
-        results = []
-        for root, dirs, files in os.walk(path):
-            for name in files:
-                if fnmatch.fnmatch(name, pattern):
-                    results.append(os.path.join(root, name))
-                    result = results[0]
-                    result = str(result)
-                    return result
+    def find(path_to_dir, suffix=".csv"):
+        filenames = listdir(path_to_dir)
+        return [filename for filename in filenames if filename.endswith(suffix)]
 
     @staticmethod
     def openCSV(path):
@@ -26,4 +20,4 @@ class fileManagment:
 
 if __name__ == '__main__':
     FM = fileManagment
-    FM.find()
+    print(FM.find(r"C:\Users\James\Documents\Computer Science A-level\Programming project\App"))
