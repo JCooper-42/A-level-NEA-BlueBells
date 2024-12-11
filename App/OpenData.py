@@ -20,6 +20,7 @@ class fileManagment:
             print("The file was not found")
 
 if __name__ == '__main__':
+    print("Currently working on OpenData")
     FM = fileManagment
     name = FM.getName(r"C:\Users\James\Documents\Computer Science A-level\Programming project\App")
     FM.openCSV(name)
