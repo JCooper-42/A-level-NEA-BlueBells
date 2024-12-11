@@ -24,6 +24,6 @@ class UserHandling:
             file.write(hash_obj.hexdigest())
             file.write("\n")
 
-if __name__ == "__main__()":
+if __name__ == '__main__()':
     UH = UserHandling
-    UserHandling.makeaccount
+    UserHandling.makeaccount()
