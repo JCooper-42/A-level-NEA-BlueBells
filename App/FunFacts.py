@@ -2,10 +2,9 @@ from OpenData import fileManagment
 
 class FunFacts(fileManagment): 
 
-    def getData(self):
-        print("Hello")
-        path = fileManagment.find("C", "microbit")
-        print(path)
+    @staticmethod
+    def getData():
+        path = fileManagment.getName("C", "microbit")
         fileManagment.openCSV(path)
 
     def formatData(self):

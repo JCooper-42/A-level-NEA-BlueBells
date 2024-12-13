@@ -1,11 +1,13 @@
 import csv
 from os import listdir
+import os
 
 class fileManagment:
 
     @staticmethod
-    def getName(path_to_dir, suffix=".csv"):
-        filenames = listdir(path_to_dir) #Finds all files
+    def getName(suffix=".csv"):
+        path = os.getcwd()
+        filenames = listdir(path) #Finds all files
         file = [filename for filename in filenames if filename.endswith(suffix)] #Loops through the file and finds csv
         return file[0] # returns the first one
 
@@ -20,7 +22,6 @@ class fileManagment:
             print("The file was not found")
 
 if __name__ == '__main__':
-    print("Currently working on OpenData")
     FM = fileManagment
-    name = FM.getName(r"C:\Users\James\Documents\Computer Science A-level\Programming project\App")
+    name = FM.getName()
     FM.openCSV(name)
