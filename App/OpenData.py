@@ -14,7 +14,7 @@ class fileManagment:
     @staticmethod
     def openCSV(fileName):
         try:
-            with open(rf"C:\Users\James\Documents\Computer Science A-level\Programming project\App\{fileName}", 'r') as file:
+            with open(rf"{os.getcwd()}\{fileName}", 'r') as file:
                 csvFile = csv.reader(file)
                 for line in csvFile:
                     print(line)
