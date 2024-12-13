@@ -4,8 +4,8 @@ class FunFacts(fileManagment):
 
     @staticmethod
     def getData():
-        path = fileManagment.getName("C", "microbit")
-        fileManagment.openCSV(path)
+        Data = fileManagment.openCSV(fileName = fileManagment.getName())
+        print(Data)
 
     def formatData(self):
         pass
@@ -18,4 +18,3 @@ class FunFacts(fileManagment):
 
 if __name__ == '__main__':
     FF = FunFacts()
-    print(FF.getData())
