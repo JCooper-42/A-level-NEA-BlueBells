@@ -19,3 +19,4 @@ class FunFacts(fileManagment):
 
 if __name__ == '__main__':
     FF = FunFacts()
+    FF.getData()
