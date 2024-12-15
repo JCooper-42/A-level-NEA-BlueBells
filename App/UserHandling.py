@@ -16,14 +16,19 @@ class UserHandling:
             if self.hashed_password in file.read():
                 return True
 
-    def makeaccount(self):
-        password = input("What is your password: ")
+    def makeaccount(password):
         hash_obj = hashlib.sha512()
         hash_obj.update(password.encode())
         with open("passwords.txt", "a") as file:
             file.write(hash_obj.hexdigest())
             file.write("\n")
 
+<<<<<<< HEAD
 if __name__ == '__main__()':
     UH = UserHandling
     UserHandling.makeaccount()
+=======
+if __name__ == "__main__":
+    UH = UserHandling
+    UH.makeaccount("Penis")
+>>>>>>> a838c2bbfd289dad1815c0a676e2da302e2e902d

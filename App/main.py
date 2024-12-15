@@ -2,6 +2,8 @@ import os.path
 import pygame
 import UserHandling 
 import OpenData # Class that opens files
+from App.FunFacts import FunFacts
+
 
 class MenuSetUp:
 
@@ -96,47 +98,50 @@ class DashBoard(MenuSetUp):  # Dashboard screen
     def funfactsarea(self):
         pygame.draw.rect(self.displaysurface, (0, 0, 0), pygame.Rect(50, 150, 400, 200), 2)  # Fun facts area
 
-# Initialize state and screens
-current_screen = "SignIn"  # Start with sign-in screen
-sign_in_screen = SignIn()  # Create instance of sign-in
-dashboard_screen = DashBoard()  # Create instance of dashboard
-Accounts = UserHandling.UserHandling()
+if __name__ == '__main__':
+    # Initialize state and screens
+    current_screen = "SignIn"  # Start with sign-in screen
+    sign_in_screen = SignIn()  # Create instance of sign-in
+    dashboard_screen = DashBoard()  # Create instance of dashboard
+    Accounts = UserHandling.UserHandling()
+    Facts = FunFacts()
 
-while True: #The main 'game' loop
-    # Have two screens derived from same parent class
-    if current_screen == "SignIn": 
-        sign_in_screen.drivemenu() 
-        sign_in_screen.draw_signin_screen()
-        sign_in_screen.writetotopcentre("BlueBells")
-        sign_in_screen.writeToScreen("Password: ", 100, 320)
-    elif current_screen == "DashBoard":
-        dashboard_screen.drivemenu()
-        dashboard_screen.funfactsarea()
-        dashboard_screen.clickleft()
-        dashboard_screen.clickright()
-        dashboard_screen.writetotopcentre("dashboard")
-
-
-    pygame.display.flip()  # Draw the screen
-
-#All the keyboard inputs - have to be in main loop
-    for event in pygame.event.get():  # Exit on x pressed
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            exit()
-        # Handle events for the sign-in screen
+    while True: #The main 'game' loop
+        # Have two screens derived from same parent class
         if current_screen == "SignIn":
-            sign_in_screen.handle_event(event)
-            # Check if the user clicks the "Sign In" button
-            if event.type == pygame.MOUSEBUTTONDOWN and sign_in_screen.signin_button_rect.collidepoint(event.pos):
-                password = sign_in_screen.password
-                Accounts.calchash(password)
-                if Accounts.checkhash():
-                    current_screen = "DashBoard"  # Switch to the dashboard screen if successful
+            sign_in_screen.drivemenu()
+            sign_in_screen.draw_signin_screen()
+            sign_in_screen.writetotopcentre("BlueBells")
+            sign_in_screen.writeToScreen("Password: ", 100, 320)
+        elif current_screen == "DashBoard":
+            dashboard_screen.drivemenu()
+            dashboard_screen.funfactsarea()
+            dashboard_screen.clickleft()
+            dashboard_screen.clickright()
+            dashboard_screen.writetotopcentre("dashboard")
 
-        # Check if mouse clicked on the left or right button on the dashboard
-        if current_screen == "DashBoard":
-            if event.type == pygame.MOUSEBUTTONDOWN and dashboard_screen.left_button_rect.collidepoint(event.pos):
-                print("Left")
-            if event.type == pygame.MOUSEBUTTONDOWN and dashboard_screen.right_button_rect.collidepoint(event.pos):
-                print("Right")
+        pygame.display.flip()  # Draw the screen
+
+    #All the keyboard inputs - have to be in main loop
+        for event in pygame.event.get():  # Exit on x pressed
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            # Handle events for the sign-in screen
+            if current_screen == "SignIn":
+                sign_in_screen.handle_event(event)
+                # Check if the user clicks the "Sign In" button
+                if event.type == pygame.MOUSEBUTTONDOWN and sign_in_screen.signin_button_rect.collidepoint(event.pos):
+                    password = sign_in_screen.password
+                    Accounts.calchash(password)
+                    if Accounts.checkhash():
+                        current_screen = "DashBoard"  # Switch to the dashboard screen if successful
+
+            # Check if mouse clicked on the left or right button on the dashboard
+            if current_screen == "DashBoard":
+                if event.type == pygame.MOUSEBUTTONDOWN and dashboard_screen.left_button_rect.collidepoint(event.pos):
+                    FunFacts.getData()
+                if event.type == pygame.MOUSEBUTTONDOWN and dashboard_screen.right_button_rect.collidepoint(event.pos):
+                    print("Right")
+
+

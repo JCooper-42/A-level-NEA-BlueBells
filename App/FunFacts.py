@@ -4,9 +4,9 @@ class FunFacts(fileManagment):
 
     def getData(self):
         print("Hello")
-        path = fileManagment.getName()
+        path = fileManagment.find("C", "microbit")
         print(path)
-        print(fileManagment.openCSV(path))
+        fileManagment.openCSV(path)
 
     def formatData(self):
         pass
@@ -19,4 +19,3 @@ class FunFacts(fileManagment):
 
 if __name__ == '__main__':
     FF = FunFacts()
-    print(FF.getData())
