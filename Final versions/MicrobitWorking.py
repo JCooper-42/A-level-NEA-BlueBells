@@ -157,9 +157,6 @@ class Integrate:
         self.Xvel = []
         self.Yvel = []
         self.Zvel = []
-        self.Xdisp = []
-        self.Ydisp = []
-        self.Zdisp = []
 
     def left_reimann_integral(self):
         print("Starting integration...")
