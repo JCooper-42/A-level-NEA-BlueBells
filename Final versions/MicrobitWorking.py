@@ -157,6 +157,9 @@ class Integrate:
         self.Xvel = []
         self.Yvel = []
         self.Zvel = []
+        self.Xdisp = []
+        self.Ydisp = []
+        self.Zdisp = []
 
     def left_reimann_integral(self):
         print("Starting integration...")
@@ -174,20 +177,14 @@ class Integrate:
 
         for z in range(len(self.AccelZtf)):
             self.Zvel.append(dtz * self.AccelZtf[z])
-        self.Zdisp.append(dtz * sum(self.Zvel))
+            self.Zdisp.append(dtz * sum(self.Zvel))
 
         print("X Velocity:", self.Xvel)
         print("Y Velocity:", self.Yvel)
         print("Z Velocity:", self.Zvel)
 
         # Return all velocities
-        return self.Xvel, self.Yvel, self.Zvel
-
-    def cut0(self):
-        pass  # Cut all the 0's in the list so less memory used
-
-    # Compress???
-
+        return self.Xvel, self.Yvel, self.Zvel, self.Xdisp, self.Ydisp, self.Zdisp
 
 class Driver(Menu, DataCollection):
     def __init__(self):
@@ -203,12 +200,15 @@ class Driver(Menu, DataCollection):
             accel_tuple = self.data_filter.tuple_to_export()  # Export tuple
             time_value = self.data_filter.time  # Get time
             integrator = Integrate(accel_tuple, time_value)
-            xresult, yresult, zresult = integrator.left_reimann_integral()
-            for i in range(0, len(xresult)):
+            xvel, yvel, zvel, xdisp, ydisp, zdisp = integrator.left_reimann_integral()
+            for i in range(0, len(xvel)):
                 log.add({
-                    'xresult': xresult[i],
-                    'yresult': yresult[i],
-                    'zresult': zresult[i]
+                    'xresult': xvel[i],
+                    'yresult': yvel[i],
+                    'zresult': zvel[i],
+                    'xdisp': xdisp[i],
+                    'ydisp': ydisp[i],
+                    'zdisp': zdisp[i]
                 })
 
 
