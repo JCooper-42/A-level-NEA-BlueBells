@@ -4,8 +4,9 @@ class FunFacts(fileManagment):
 
     def __init__(self):
         self.xvelocity = []
-        self.yvelocity =[]
+        self.yvelocity = []
         self.zvelocity = []
+        self.ydisplacment = []
 
     def getData(self):
         FileM = fileManagment() # Make an instance of FileM in diff class
@@ -13,20 +14,16 @@ class FunFacts(fileManagment):
         FileM.openCSV(fileName = data)
         self.xvelocity, self.yvelocity, self.zvelocity, self.time = FileM.formatData() #unpack in to instance vars
 
-    def FunFact1(self): #Top rep speed
-        print(self.yvelocity)
-        print(f"Your maximum lift speed was {max(self.yvelocity, default=0)}")
+    def intergrateY(self):
+        for i in range(0, len(self.yvelocity))::
+                self.ydisplacment.append(dty * self.AccelYtf[j])
 
-    def FunFact2(self):
-        print(f"Your minimum lift speed was {min(self.yvelocity)}")
+    def FunFact1(self):
+        print("Your maximum velocity was", max(self.yvelocity))
 
-    def FunFact3(self):
-        Ek = 0.5 * 10 * {max(self.yvelocity)}
-        calories = Ek / 4.81
-        print("Lifting 10kg at this speed, you burned roughly", calories)
-
+    def FunFact2(self)  :
+        print("Your minimum velcoity was", min(self.yvelocity))
 
 if __name__ == '__main__':
     FunF = FunFacts()
     FunF.getData()
-    print(FunF.FunFact1())

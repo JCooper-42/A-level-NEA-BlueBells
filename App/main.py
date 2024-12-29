@@ -1,6 +1,6 @@
 import os.path
 import pygame
-import UserHandling
+import UserHandling 
 import OpenData # Class that opens files
 from App.FunFacts import FunFacts
 
@@ -8,97 +8,106 @@ from App.FunFacts import FunFacts
 class MenuSetUp:
 
     def __init__(self, title, background_color):
-        pygame.init()
-        pygame.font.init()
-        self.title = title
-        self.background_color = background_color
-        self.displaysurface = pygame.display.set_mode((500, 500))
+        pygame.init()  # Initialize Pygame
+        pygame.font.init()  # Get the fonts
+        self.title = title  # Title parameter passed
+        self.background_color = background_color  # Set background color
+        self.displaysurface = pygame.display.set_mode((500, 500))  # Tuple for window size
         self.titlefont = pygame.font.SysFont('opensans', 64)
         self.contentfont = pygame.font.SysFont('opensans', 20)
-        self.running = True
+        self.running = True  # Running so it can be stopped
 
     def writeToScreen(self, text: str, posx: int, posy: int):
-        text = self.contentfont.render(text, 1, (0, 0, 0))
-        dest = text.get_rect(x=posx, y=posy)
+        text = self.contentfont.render(text, 1, (0,0,0))
+        dest = text.get_rect(x = posx, y = posy)
         self.displaysurface.blit(text, dest)
 
     def drivemenu(self):
-        self.displaysurface.fill(self.background_color)
-        pygame.display.set_caption(self.title)
+        self.displaysurface.fill(self.background_color)  # Put background color on the screen
+        pygame.display.set_caption(self.title)  # Put caption in top left corner
 
     def writetotopcentre(self, text):
         text = self.titlefont.render(text, 1, (0, 0, 0))
-        dest = text.get_rect(center=(250, 30))
+        dest = text.get_rect(center=(250, 30))  # All screens are same size
         self.displaysurface.blit(text, dest)
 
-
-class SignIn(MenuSetUp):
-
+class SignIn(MenuSetUp):  # SignIn screen
     def __init__(self):
         super().__init__("Sign In", (250, 250, 250))
-        self.password_rect = pygame.Rect(175, 300, 150, 50)
-        self.signin_button_rect = pygame.Rect(200, 400, 100, 50)
-        self.password = ""
-        self.active = False
+        self.password_rect = pygame.Rect(175, 300, 150, 50)  # Password input rectangle
+        self.signin_button_rect = pygame.Rect(200, 400, 100, 50)  # Sign-in button rectangle
+        self.password = ""  # Store the password entered by the user
+        self.active = False  # Track if the password input box is active for input
 
     def draw_signin_screen(self):
+        # Fill background
         self.displaysurface.fill(self.background_color)
+
+        # Draw the password rectangle (input box)
         pygame.draw.rect(self.displaysurface, (100, 0, 0), self.password_rect, 2)
-        display_text = '*' * len(self.password)
+
+        # Display the password as asterisks
+        display_text = '*' * len(self.password)  # Replace characters with asterisks
         text_surface = self.contentfont.render(display_text, True, (0, 0, 0))
         self.displaysurface.blit(text_surface, (self.password_rect.x + 5, self.password_rect.y + 15))
+
+        # Draw the sign-in button
         pygame.draw.rect(self.displaysurface, (0, 0, 0), self.signin_button_rect)
         signin_text = self.contentfont.render("Sign In", True, (255, 255, 255))
         self.displaysurface.blit(signin_text, (self.signin_button_rect.x + 30, self.signin_button_rect.y + 10))
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
+            # Check if the password input box is clicked
             if self.password_rect.collidepoint(event.pos):
-                self.active = True
+                self.active = True  # Activate the input box
             else:
-                self.active = False
+                self.active = False  # Deactivate if clicked outside
 
         if event.type == pygame.KEYDOWN and self.active:
             if event.key == pygame.K_BACKSPACE:
-                self.password = self.password[:-1]
-                pygame.display.flip()
+                # Remove the last character
+                self.password = self.password[:-1] # removed the last character in the password string
             if event.key == pygame.K_BACKSPACE and pygame.key.get_mods() & pygame.KMOD_CTRL:
-                self.password = ""
-            elif event.key != pygame.K_RETURN:
+                self.password = "" # If control backspace pressed, removed all content in password
+            elif event.key != pygame.K_RETURN: # Makes sure enter is not registered as an input
+                # Add character to the password
                 self.password += event.unicode
 
-
-class DashBoard(MenuSetUp):
-
+class DashBoard(MenuSetUp):  # Dashboard screen
     def __init__(self):
         self.leftarrow = pygame.transform.scale(pygame.image.load(os.path.join("leftarrow.png")), (100, 100))
-        self.rightarrow_img = pygame.transform.rotate(self.leftarrow, 180)
-        super().__init__("DashBoard", (255, 255, 255))
-        self.left_button_rect = pygame.Rect(50, 370, 150, 60)
-        self.right_button_rect = pygame.Rect(300, 370, 150, 60)
-        self.current_message = ""
+        self.rightarrow_img = pygame.transform.rotate(self.leftarrow, 180)  # Right is left rotated 180 degrees
+
+        super().__init__("DashBoard", (255, 255, 255))  # Set the color using hex values here
+
+        # Define button rectangles for left and right buttons
+        self.left_button_rect = pygame.Rect(50, 370, 150, 60)  # Left button rectangle
+        self.right_button_rect = pygame.Rect(300, 370, 150, 60)  # Right button rectangle
 
     def clickleft(self):
-        pygame.draw.rect(self.displaysurface, self.background_color, self.left_button_rect)
-        self.displaysurface.blit(self.leftarrow, (50, 350))
+        # Draw left button and arrow
+        pygame.draw.rect(self.displaysurface, self.background_color, self.left_button_rect)  # Draw the left button
+        self.displaysurface.blit(self.leftarrow, (50, 350))  # Draw left arrow
 
     def clickright(self):
-        pygame.draw.rect(self.displaysurface, self.background_color, self.right_button_rect)
-        self.displaysurface.blit(self.rightarrow_img, (350, 350))
+        # Draw right button and arrow
+        pygame.draw.rect(self.displaysurface, self.background_color, self.right_button_rect)  # Draw the right button (green color)
+        self.displaysurface.blit(self.rightarrow_img, (350, 350))  # Draw right arrow (rotated)
 
     def funfactsarea(self):
-        pygame.draw.rect(self.displaysurface, (0, 0, 0), pygame.Rect(50, 150, 400, 200), 2)
-        self.writeToScreen(self.current_message, 60, 160)
-
+        pygame.draw.rect(self.displaysurface, (0, 0, 0), pygame.Rect(50, 150, 400, 200), 2)  # Fun facts area
 
 if __name__ == '__main__':
-    current_screen = "SignIn"
-    sign_in_screen = SignIn()
-    dashboard_screen = DashBoard()
+    # Initialize state and screens
+    current_screen = "SignIn"  # Start with sign-in screen
+    sign_in_screen = SignIn()  # Create instance of sign-in
+    dashboard_screen = DashBoard()  # Create instance of dashboard
     Accounts = UserHandling.UserHandling()
     Facts = FunFacts()
 
-    while True:
+    while True: #The main 'game' loop
+        # Have two screens derived from same parent class
         if current_screen == "SignIn":
             sign_in_screen.drivemenu()
             sign_in_screen.draw_signin_screen()
@@ -111,24 +120,29 @@ if __name__ == '__main__':
             dashboard_screen.clickright()
             dashboard_screen.writetotopcentre("dashboard")
 
-        for event in pygame.event.get():
+        pygame.display.flip()  # Draw the screen
+
+    #All the keyboard inputs - have to be in main loop
+        for event in pygame.event.get():  # Exit on x pressed
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
-
+            # Handle events for the sign-in screen
             if current_screen == "SignIn":
                 sign_in_screen.handle_event(event)
+                # Check if the user clicks the "Sign In" button
                 if event.type == pygame.MOUSEBUTTONDOWN and sign_in_screen.signin_button_rect.collidepoint(event.pos):
                     password = sign_in_screen.password
                     Accounts.calchash(password)
                     if Accounts.checkhash():
-                        current_screen = "DashBoard"
+                        current_screen = "DashBoard"  # Switch to the dashboard screen if successful
 
+            # Check if mouse clicked on the left or right button on the dashboard
             if current_screen == "DashBoard":
                 if event.type == pygame.MOUSEBUTTONDOWN and dashboard_screen.left_button_rect.collidepoint(event.pos):
-                    dashboard_screen.current_message = Facts.FunFact1()
-                    #Starting to work on displaying the fun facts
+                    Facts.getData()
                 if event.type == pygame.MOUSEBUTTONDOWN and dashboard_screen.right_button_rect.collidepoint(event.pos):
-                    dashboard_screen.current_message = "Right button clicked!"
+                    print("Right")
 
-        pygame.display.flip()
+
+
