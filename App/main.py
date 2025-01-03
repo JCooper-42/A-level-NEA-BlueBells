@@ -141,6 +141,7 @@ if __name__ == '__main__':
             if current_screen == "DashBoard":
                 if event.type == pygame.MOUSEBUTTONDOWN and dashboard_screen.left_button_rect.collidepoint(event.pos):
                     Facts.getData()
+                    Facts.FunFact1()
                 if event.type == pygame.MOUSEBUTTONDOWN and dashboard_screen.right_button_rect.collidepoint(event.pos):
                     print("Right")
 
