@@ -23,7 +23,7 @@ class FunFacts(fileManagment):
     def FunFact3(self):
         total = 0
         for i in range(0, len(self.yvelocity) - 1):
-            total = total + self.yvelocity[i]
+            total = total + float(self.yvelocity[i])
 
 
 if __name__ == '__main__':
