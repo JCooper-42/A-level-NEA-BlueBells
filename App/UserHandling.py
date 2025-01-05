@@ -2,8 +2,6 @@ import hashlib
 
 class UserHandling:
 
-    def __init__(self):
-        self.hashed_password = ""
 
     def calchash(self, string):
         hash_obj = hashlib.sha512()
@@ -11,13 +9,15 @@ class UserHandling:
         hashed_password = hash_obj.hexdigest() #hex encoding for hash
         return hashed_password
 
-    def checkhash(self):
+    def checkhash(self, password):
         with open("passwords.txt", "r") as file:
-            if self.hashed_password in file.read():
+            if password in file.read():
                 return True
+            else:
+                return False
 
     def makeaccount(password):
-        hash_obj = hashlib.sha512() #Insta nce of hashlib
+        hash_obj = hashlib.sha512() #Instance of hashlib
         hash_obj.update(password.encode())
         with open("passwords.txt", "a") as file:
             file.write(hash_obj.hexdigest())
